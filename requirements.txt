@@ -1,0 +1,8 @@
+streamlit>=1.24
+plotly>=5.15
+pandas>=2.0
+numpy>=1.25
+streamlit-autorefresh>=0.2
+streamlit-plotly-events>=0.5
+nsepython>=1.1
+python-dateutil>=2.8
