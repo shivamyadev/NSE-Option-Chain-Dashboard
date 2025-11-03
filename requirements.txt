@@ -6,4 +6,5 @@ streamlit-autorefresh
 streamlit-plotly-events
 nsepython
 python-dateutil
+supabase
 
