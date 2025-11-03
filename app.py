@@ -397,45 +397,45 @@ if should_fetch:
         }
 
         # Only append & save if market is open and not weekend
-       if market_open_now:
-            st.session_state["history"].append(history_entry)
-            ok, info = save_history_csv(symbol)
-            if not ok:
-                st.warning(f"Auto-save failed: {info}")
-
-            # --- NEW: store to Supabase (upload JSON + insert DB row) ---
-            try:
-                # payload we upload can be the same history_entry or the full 'data' response
-                payload_to_store = {
-                    "history_entry": history_entry,
-                    "underlying_value": underlying_value,
-                    "raw_records_count": len(records) if records is not None else 0
-                }
-
-                # pass the owner field (no auth required in this quick setup)
-                # Make sure `store_fetch_record` supports an `owner` argument (see step 3 below)
-                res = store_fetch_record(
-                    payload=payload_to_store,
-                    symbol=symbol,
-                    expiry=selected_expiry,
-                    save_file=True,
-                    owner=owner_name
-                )
-
-                # handle response shapes from supabase client
-                data = getattr(res, "data", None)
-                error = getattr(res, "error", None) or (res.get("error") if isinstance(res, dict) else None)
-
-                if error:
-                    st.sidebar.warning(f"Supabase insert error: {error}")
-                else:
-                    # show confirmation but keep it subtle (no spam on every auto-fetch)
-                    if st.session_state.get("fetch_count", 0) % 5 == 0 or manual_fetch:
-                        st.sidebar.success("Stored latest fetch to Supabase")
-            except Exception as e:
-                st.sidebar.warning(f"Failed to store to Supabase: {e}")
-        else:
-            st.info("Market is closed (outside 09:15-15:30 or weekend) — not appending history or saving to CSV.")
+          if market_open_now:
+               st.session_state["history"].append(history_entry)
+               ok, info = save_history_csv(symbol)
+               if not ok:
+                   st.warning(f"Auto-save failed: {info}")
+   
+               # --- NEW: store to Supabase (upload JSON + insert DB row) ---
+               try:
+                   # payload we upload can be the same history_entry or the full 'data' response
+                   payload_to_store = {
+                       "history_entry": history_entry,
+                       "underlying_value": underlying_value,
+                       "raw_records_count": len(records) if records is not None else 0
+                   }
+   
+                   # pass the owner field (no auth required in this quick setup)
+                   # Make sure `store_fetch_record` supports an `owner` argument (see step 3 below)
+                   res = store_fetch_record(
+                       payload=payload_to_store,
+                       symbol=symbol,
+                       expiry=selected_expiry,
+                       save_file=True,
+                       owner=owner_name
+                   )
+   
+                   # handle response shapes from supabase client
+                   data = getattr(res, "data", None)
+                   error = getattr(res, "error", None) or (res.get("error") if isinstance(res, dict) else None)
+   
+                   if error:
+                       st.sidebar.warning(f"Supabase insert error: {error}")
+                   else:
+                       # show confirmation but keep it subtle (no spam on every auto-fetch)
+                       if st.session_state.get("fetch_count", 0) % 5 == 0 or manual_fetch:
+                           st.sidebar.success("Stored latest fetch to Supabase")
+               except Exception as e:
+                   st.sidebar.warning(f"Failed to store to Supabase: {e}")
+           else:
+               st.info("Market is closed (outside 09:15-15:30 or weekend) — not appending history or saving to CSV.")
 
 # Update placeholders
 placeholder_symbol.markdown(f"**Symbol:** `{symbol or '-'}`")
@@ -741,4 +741,5 @@ else:
 
 st.markdown("---")
 st.caption("History auto-saved per-symbol as CSV during market hours only. Charts are zoomable; use the modebar to draw/analyze. Current fetched CE/PE values and timestamp are shown in the aggregated sample.")
+
 
