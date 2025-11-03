@@ -436,7 +436,7 @@ if should_fetch:
                 st.sidebar.warning(f"Failed to store to Supabase: {e}")
         else:
             st.info("Market is closed (outside 09:15-15:30 or weekend) — not appending history or saving to CSV.")
-      except Exception as e:
+   except Exception as e:
         st.error(f"Failed to fetch option chain: {e}")
 else:
     st.info("Not fetching now. Press 'Fetch Now' or enable auto-refresh to pull data.")
@@ -745,6 +745,7 @@ else:
 
 st.markdown("---")
 st.caption("History auto-saved per-symbol as CSV during market hours only. Charts are zoomable; use the modebar to draw/analyze. Current fetched CE/PE values and timestamp are shown in the aggregated sample.")
+
 
 
 
